@@ -1,0 +1,26 @@
+{
+   "type": "mongodb",
+   "host": "ds119078.mlab.com",
+   "port": 19078,
+   "username": "admin",
+   "password": "Foundation94",
+   "database": "heroku_314vj3bt",
+   "synchronize": true,
+   "autoSchemaSync": true,
+   "logging": false,
+   "useNewUrlParser": true,
+   "entities": [
+      "models/**/*.ts"
+   ],
+   "migrations": [
+      "migration/**/*.ts"
+   ],
+   "subscribers": [
+      "subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "models",
+      "migrationsDir": "migration",
+      "subscribersDir": "subscriber"
+   }
+}
