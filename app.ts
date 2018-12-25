@@ -8,7 +8,7 @@ import {UserController} from "./controllers/UserController";
 
 useContainer(Container);
 useOrmContainer(Container);
-createConnection().then(async conn => {
+createConnection().then(async () => {
   const app = createExpressServer({
     routePrefix: '/api',
     controllers: [UserController]

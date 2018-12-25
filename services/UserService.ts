@@ -15,6 +15,12 @@ export class UserService {
         .then(users => Promise.resolve(users.map(u => plainToClass(User, u))));
     }
 
+    public get(id: string): Promise<User> {
+      const objId = ObjectID.createFromHexString(id);
+      return this.repo.findOne(objId)
+        .then(user => Promise.resolve(plainToClass(User, user)));
+    }
+
     public create(user: User): User {
       return plainToClass(User, this.repo.save(user));
     }

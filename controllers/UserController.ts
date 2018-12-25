@@ -4,6 +4,7 @@ import { User } from '../models/User';
 import { Inject } from 'typedi';
 import { UserService } from "../services/UserService";
 import { DeleteResult } from 'typeorm';
+import { ResponseSchema } from 'routing-controllers-openapi';
 
 @JsonController('/users')
 export class UserController {
@@ -12,8 +13,15 @@ export class UserController {
    private service: UserService;
 
     @Get('/')
+    @ResponseSchema(User, { isArray: true })
     getAll(): Promise<User[]> {
        return this.service.getAll();
+    }
+
+    @Get('/:id')
+    @ResponseSchema(User)
+    getById(@Param('id') id: string): Promise<User> {
+      return this.service.get(id);
     }
 
     @Post('/')
