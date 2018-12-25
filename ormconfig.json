@@ -3,7 +3,7 @@
    "host": "ds119078.mlab.com",
    "port": 19078,
    "username": "admin",
-   "password": "Foundation94",
+   "password": "admin123",
    "database": "heroku_314vj3bt",
    "synchronize": true,
    "autoSchemaSync": true,

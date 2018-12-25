@@ -4,6 +4,11 @@ import { User } from "../models/User";
 import { ObjectID } from 'mongodb';
 import { Repository, DeleteResult } from "typeorm";
 import { plainToClass } from "class-transformer";
+import { x2 } from 'sha256';
+
+import { RegisterViewModel } from "../view-models/RegisterViewModel";
+import { LoginViewModel } from "../view-models/LoginViewModel";
+import { TokenViewModel } from "../view-models/TokenViewMode";
 
 @Service()
 export class UserService {
@@ -23,6 +28,29 @@ export class UserService {
 
     public create(user: User): User {
       return plainToClass(User, this.repo.save(user));
+    }
+
+    public register(user: RegisterViewModel): Promise<User> {
+      const entity: User = new User(
+        user.email, user.firstName, user.lastName, user.age);
+      entity.passwordHash = x2(user.password);
+
+      return this.repo.save(entity); // .then(u => Promise.resolve(plainToClass(User, u)));
+    }
+
+    public login(loginVm: LoginViewModel): Promise<TokenViewModel> {
+      return this.repo.findOne({ 
+        email: loginVm.email,
+        passwordHash: x2(loginVm.password) 
+        }).then((u: User) => {
+          if(!u.token) {
+            u.token = x2(`${u.email}${u.passwordHash}`);
+            return this.repo.save(u);
+          } else {
+            return Promise.resolve(u);
+          }
+        }).then(u => Promise.resolve(new TokenViewModel(u.token)));
+
     }
 
     public delete(id: string): Promise<DeleteResult> {

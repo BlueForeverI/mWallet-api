@@ -10,6 +10,9 @@ export class User {
     id!: ObjectID;
 
     @Column()
+    email: string;
+
+    @Column()
     @IsNotEmpty()
     firstName: string;
 
@@ -21,9 +24,21 @@ export class User {
     @IsPositive()
     age: number;
 
-    constructor(firstName: string, lastName: string, age: number) {
-      this.firstName = firstName;
-      this.lastName = lastName;
-      this.age = age;
+    @Column()
+    @Exclude()
+    passwordHash?: string;
+
+    @Column()
+    @Exclude()
+    token?: string;
+
+    constructor(email: string, 
+                firstName: string, 
+                lastName: string, 
+                age: number) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
     }
 }
