@@ -1,4 +1,4 @@
-import {JsonController, Param, Body, Get, Post, Delete, Authorized} from 'routing-controllers';
+import {JsonController, Param, Body, Get, Post, Delete, Authorized, CurrentUser} from 'routing-controllers';
 
 import { User } from '../models/User';
 import { Inject } from 'typedi';
@@ -19,7 +19,7 @@ export class UserController {
     @Get('/')
     @ResponseSchema(User, { isArray: true })
     getAll(): Promise<User[]> {
-       return this.service.getAll();
+      return this.service.getAll();
     }
 
     @Get('/:id')
@@ -29,7 +29,7 @@ export class UserController {
     }
 
     @Post('/')
-    create(@Body() user: User): User {
+    create(@Body() user: User): Promise<User> {
       return this.service.create(user);
     }
 

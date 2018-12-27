@@ -3,7 +3,6 @@ import { InjectRepository } from "typeorm-typedi-extensions";
 import { User } from "../models/User";
 import { ObjectID } from 'mongodb';
 import { Repository, DeleteResult } from "typeorm";
-import { plainToClass } from "routing-controllers/node_modules/class-transformer";
 import { x2 } from 'sha256';
 
 import { RegisterViewModel } from "../view-models/RegisterViewModel";
@@ -16,18 +15,16 @@ export class UserService {
     private repo: Repository<User>;
 
     public getAll(): Promise<User[]> {
-      return this.repo.find()
-        .then(users => Promise.resolve(users.map(u => plainToClass(User, u))));
+      return this.repo.find();
     }
 
     public get(id: string): Promise<User> {
       const objId = ObjectID.createFromHexString(id);
-      return this.repo.findOne(objId)
-        .then(user => Promise.resolve(plainToClass(User, user)));
+      return this.repo.findOne(objId);
     }
 
-    public create(user: User): User {
-      return plainToClass(User, this.repo.save(user));
+    public create(user: User): Promise<User> {
+      return this.repo.save(user);
     }
 
     public register(user: RegisterViewModel): Promise<TokenViewModel> {
