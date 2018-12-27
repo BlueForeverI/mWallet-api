@@ -3,7 +3,7 @@ import { InjectRepository } from "typeorm-typedi-extensions";
 import { User } from "../models/User";
 import { ObjectID } from 'mongodb';
 import { Repository, DeleteResult } from "typeorm";
-import { plainToClass } from "class-transformer";
+import { plainToClass } from "routing-controllers/node_modules/class-transformer";
 import { x2 } from 'sha256';
 
 import { RegisterViewModel } from "../view-models/RegisterViewModel";
@@ -30,12 +30,17 @@ export class UserService {
       return plainToClass(User, this.repo.save(user));
     }
 
-    public register(user: RegisterViewModel): Promise<User> {
+    public register(user: RegisterViewModel): Promise<TokenViewModel> {
       const entity: User = new User(
         user.email, user.firstName, user.lastName, user.age);
       entity.passwordHash = x2(user.password);
 
-      return this.repo.save(entity); // .then(u => Promise.resolve(plainToClass(User, u)));
+      return this.repo.save(entity)
+        .then(registered => {
+          registered.token = x2(`${registered.email}${registered.passwordHash}`);
+          return this.repo.save(registered)
+        })
+        .then(saved => new TokenViewModel(saved.token));
     }
 
     public login(loginVm: LoginViewModel): Promise<TokenViewModel> {

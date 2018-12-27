@@ -39,7 +39,7 @@ export class UserController {
     }
 
     @Post('/register')
-    register(@Body() registerViewModel: RegisterViewModel): Promise<User> {
+    register(@Body() registerViewModel: RegisterViewModel): Promise<TokenViewModel> {
       return this.service.register(registerViewModel);
     }
 

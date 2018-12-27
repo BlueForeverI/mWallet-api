@@ -1,6 +1,6 @@
-import {Entity, ObjectIdColumn, ObjectID, Column} from "typeorm";
-import { Expose, Exclude, Transform, Type } from 'class-transformer';
-import { IsNotEmpty, IsPositive } from 'class-validator';
+import {Entity, ObjectIdColumn, ObjectID, Column, Index} from "typeorm";
+import { Expose, Exclude, Transform, Type } from 'routing-controllers/node_modules/class-transformer';
+import { IsNotEmpty, IsPositive } from 'routing-controllers/node_modules/class-validator';
 
 @Entity()
 export class User {
@@ -10,18 +10,16 @@ export class User {
     id!: ObjectID;
 
     @Column()
+    @Index({ unique: true })
     email: string;
 
     @Column()
-    @IsNotEmpty()
     firstName: string;
 
     @Column()
-    @IsNotEmpty()
     lastName: string;
 
     @Column()
-    @IsPositive()
     age: number;
 
     @Column()

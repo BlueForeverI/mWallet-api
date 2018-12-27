@@ -32,8 +32,6 @@
     "@types/node": "^10.12.18",
     "automapper-ts": "^1.9.0",
     "body-parser": "^1.18.3",
-    "class-transformer": "^0.2.0",
-    "class-validator": "^0.9.1",
     "class-validator-jsonschema": "^1.2.0",
     "express": "^4.16.4",
     "fast-sha256": "^1.1.0",

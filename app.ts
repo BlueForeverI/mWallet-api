@@ -13,6 +13,8 @@ createConnection().then(async (conn) => {
   const app = createExpressServer({
     routePrefix: '/api',
     controllers: [UserController],
+    validation: true,
+    classTransformer: true,
     authorizationChecker: (action: Action, roles: string[]): Promise<boolean> => {
       const token = action.request.headers["authorization"];
 
