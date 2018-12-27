@@ -42,6 +42,7 @@
     "routing-controllers": "^0.7.7",
     "routing-controllers-openapi": "^1.4.2",
     "sha256": "^0.2.0",
+    "ts-node": "^7.0.1",
     "tsoa": "^2.3.8",
     "typedi": "^0.8.0",
     "typeorm": "^0.2.9",
