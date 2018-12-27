@@ -24,6 +24,6 @@ createConnection().then(async (conn) => {
     currentUserChecker: authService.currentUserChecker(conn)
   });
 
-  app.listen(process.env.port || 3000); 
+  app.listen(process.env.PORT || 3000); 
   console.log('The server is up and running...');
 });
