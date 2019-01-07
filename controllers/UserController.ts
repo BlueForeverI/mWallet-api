@@ -1,4 +1,4 @@
-import {JsonController, Param, Body, Get, Post, Delete, Authorized, CurrentUser} from 'routing-controllers';
+import {JsonController, Param, Body, Get, Post, Delete, Authorized, CurrentUser, Put} from 'routing-controllers';
 
 import { User } from '../models/User';
 import { Inject } from 'typedi';
@@ -6,8 +6,9 @@ import { UserService } from "../services/UserService";
 import { DeleteResult } from 'typeorm';
 import { ResponseSchema } from 'routing-controllers-openapi';
 import { LoginViewModel } from '../view-models/LoginViewModel';
-import { TokenViewModel } from '../view-models/TokenViewMode';
+import { LoggedUserViewModel } from '../view-models/TokenViewMode';
 import { RegisterViewModel } from '../view-models/RegisterViewModel';
+import { UpdateIncomeViewModel } from '../view-models/UpdateIncomeViewModel';
 
 @JsonController('/users')
 export class UserController {
@@ -34,13 +35,18 @@ export class UserController {
     }
 
     @Post('/login')
-    login(@Body() loginViewModel: LoginViewModel): Promise<TokenViewModel> {
+    login(@Body() loginViewModel: LoginViewModel): Promise<LoggedUserViewModel> {
       return this.service.login(loginViewModel);
     }
 
     @Post('/register')
-    register(@Body() registerViewModel: RegisterViewModel): Promise<TokenViewModel> {
+    register(@Body() registerViewModel: RegisterViewModel): Promise<LoggedUserViewModel> {
       return this.service.register(registerViewModel);
+    }
+
+    @Put('/updateIncome')
+    updateIncome(@Body() incomeVm: UpdateIncomeViewModel, @CurrentUser() user?: User) {
+      return this.service.updateIncome(user, incomeVm.income);
     }
 
     @Delete('/:id')

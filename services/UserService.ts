@@ -7,7 +7,7 @@ import { x2 } from 'sha256';
 
 import { RegisterViewModel } from "../view-models/RegisterViewModel";
 import { LoginViewModel } from "../view-models/LoginViewModel";
-import { TokenViewModel } from "../view-models/TokenViewMode";
+import { LoggedUserViewModel } from "../view-models/TokenViewMode";
 
 @Service()
 export class UserService {
@@ -27,7 +27,7 @@ export class UserService {
       return this.repo.save(user);
     }
 
-    public register(user: RegisterViewModel): Promise<TokenViewModel> {
+    public register(user: RegisterViewModel): Promise<LoggedUserViewModel> {
       const entity: User = new User(
         user.email, user.firstName, user.lastName, user.age);
       entity.passwordHash = x2(user.password);
@@ -37,10 +37,11 @@ export class UserService {
           registered.token = x2(`${registered.email}${registered.passwordHash}`);
           return this.repo.save(registered)
         })
-        .then(saved => new TokenViewModel(saved.token));
+        .then(saved => new LoggedUserViewModel(
+          saved.token, saved.firstName, saved.lastName, saved.income));
     }
 
-    public login(loginVm: LoginViewModel): Promise<TokenViewModel> {
+    public login(loginVm: LoginViewModel): Promise<LoggedUserViewModel> {
       return this.repo.findOne({ 
         email: loginVm.email,
         passwordHash: x2(loginVm.password) 
@@ -51,8 +52,14 @@ export class UserService {
           } else {
             return Promise.resolve(u);
           }
-        }).then(u => Promise.resolve(new TokenViewModel(u.token)));
+        }).then(u => Promise.resolve(new LoggedUserViewModel(
+          u.token, u.firstName, u.lastName, u.income)));
 
+    }
+
+    public updateIncome(user: User, income: number): Promise<User> {
+      user.income = income;
+      return this.create(user);
     }
 
     public delete(id: string): Promise<DeleteResult> {

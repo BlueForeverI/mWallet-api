@@ -22,6 +22,9 @@ export class User {
   age: number;
 
   @Column()
+  income: number;
+
+  @Column()
   @Exclude()
   passwordHash?: string;
 
@@ -32,10 +35,12 @@ export class User {
   constructor(email: string, 
               firstName: string, 
               lastName: string, 
-              age: number) {
+              age: number,
+              income: number = 0) {
       this.email = email;
       this.firstName = firstName;
       this.lastName = lastName;
       this.age = age;
+      this.income = income;
   }
 }

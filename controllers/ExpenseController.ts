@@ -1,4 +1,4 @@
-import { JsonController, Authorized, Get, CurrentUser, Post, Body, Delete, Param } from "routing-controllers";
+import { JsonController, Authorized, Get, CurrentUser, Post, Body, Delete, Param, QueryParam } from "routing-controllers";
 import { Inject } from "typedi";
 import { ExpenseService } from "../services/ExpenseService";
 import { ResponseSchema } from "routing-controllers-openapi";
@@ -14,8 +14,10 @@ export class ExpenseController {
   @Authorized()
   @Get('/')
   @ResponseSchema(Expense, { isArray: true })
-  getAll(@CurrentUser() user?: User): Promise<Expense[]> {
-    return this.service.getAll(user);
+  getAll(@QueryParam('start') startDate?: Date,
+         @QueryParam('end') endDate?: Date,
+         @CurrentUser() user?: User): Promise<Expense[]> {
+    return this.service.getAll(user, startDate, endDate);
   }
 
   @Authorized()
